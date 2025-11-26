@@ -1,0 +1,509 @@
+# ═══════════════════════════════════════════════════════════════
+# 🤖 Dependabot Configuration - CyberGuard AI 2070
+# ═══════════════════════════════════════════════════════════════
+# يفحص كل التبعيات في المشروع بدقة عالية
+# يُحدث التبعيات تلقائياً ويُنشئ Pull Requests
+
+version: 2
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Python Dependencies (pip)
+# ═══════════════════════════════════════════════════════════════
+updates:
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+      time: "03:00"
+      timezone: "UTC"
+    
+    # عدد PRs المفتوحة في نفس الوقت
+    open-pull-requests-limit: 10
+    
+    # التسميات
+    labels:
+      - "dependencies"
+      - "python"
+      - "security"
+    
+    # المراجعين
+    reviewers:
+      - "security-team"
+      - "backend-team"
+    
+    # المُعينين
+    assignees:
+      - "ahmed-hassan"
+    
+    # Milestone
+    milestone: "v2.1"
+    
+    # التجميع
+    groups:
+      # تجميع تحديثات الأمان معاً
+      security-updates:
+        dependency-type: "production"
+        update-types:
+          - "patch"
+          - "minor"
+      
+      # تجميع مكتبات ML
+      ml-libraries:
+        patterns:
+          - "torch*"
+          - "tensorflow*"
+          - "scikit-learn"
+          - "numpy"
+          - "pandas"
+      
+      # تجميع مكتبات الويب
+      web-frameworks:
+        patterns:
+          - "fastapi*"
+          - "uvicorn*"
+          - "starlette*"
+          - "pydantic*"
+    
+    # التجاهل
+    ignore:
+      # تجاهل نسخ معينة
+      - dependency-name: "tensorflow"
+        versions: ["2.14.x"]  # نسخة غير مستقرة
+      
+      # تجاهل major updates لبعض الحزم الحرجة
+      - dependency-name: "torch"
+        update-types: ["version-update:semver-major"]
+    
+    # Commit message
+    commit-message:
+      prefix: "chore(deps)"
+      prefix-development: "chore(deps-dev)"
+      include: "scope"
+    
+    # Pull request branch name
+    pull-request-branch-name:
+      separator: "/"
+    
+    # إعادة المحاولة عند الفشل
+    rebase-strategy: "auto"
+    
+    # استهداف branch معين
+    target-branch: "develop"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Python Dependencies (requirements.txt)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "pip"
+    directory: "/backend"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "03:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "backend"
+    reviewers:
+      - "backend-team"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 npm (Frontend)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "npm"
+    directory: "/frontend"
+    schedule:
+      interval: "daily"
+      time: "04:00"
+    open-pull-requests-limit: 10
+    labels:
+      - "dependencies"
+      - "frontend"
+      - "javascript"
+    reviewers:
+      - "frontend-team"
+    assignees:
+      - "sara-mohamed"
+    
+    groups:
+      # React ecosystem
+      react-packages:
+        patterns:
+          - "react*"
+          - "next*"
+          - "@types/react*"
+      
+      # UI libraries
+      ui-libraries:
+        patterns:
+          - "@shadcn/*"
+          - "tailwindcss*"
+          - "lucide-react"
+      
+      # Build tools
+      build-tools:
+        patterns:
+          - "vite*"
+          - "webpack*"
+          - "babel*"
+          - "esbuild*"
+    
+    ignore:
+      - dependency-name: "react"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+    
+    commit-message:
+      prefix: "chore(deps)"
+      include: "scope"
+    
+    versioning-strategy: "increase
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Docker
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "docker"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "02:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "docker"
+      - "infrastructure"
+    reviewers:
+      - "devops-team"
+    
+    groups:
+      base-images:
+        patterns:
+          - "python*"
+          - "node*"
+          - "nginx*"
+          - "postgres*"
+          - "redis*"
+    
+    commit-message:
+      prefix: "chore(docker)"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Docker Compose
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "docker"
+    directory: "/docker"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "docker"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 GitHub Actions
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "05:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "ci-cd"
+      - "github-actions"
+    reviewers:
+      - "devops-team"
+    
+    groups:
+      # تجميع actions من نفس المؤلف
+      actions-by-vendor:
+        patterns:
+          - "actions/*"
+      
+      security-actions:
+        patterns:
+          - "github/codeql-action*"
+          - "aquasecurity/*"
+          - "snyk/*"
+    
+    commit-message:
+      prefix: "chore(ci)"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Terraform (Infrastructure as Code)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "terraform"
+    directory: "/terraform"
+    schedule:
+      interval: "weekly"
+      day: "tuesday"
+      time: "03:00"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "terraform"
+      - "infrastructure"
+    reviewers:
+      - "devops-team"
+      - "security-team"
+    
+    commit-message:
+      prefix: "chore(infra)"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Go Modules (Microservices)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "gomod"
+    directory: "/services/threat-intel"
+    schedule:
+      interval: "daily"
+      time: "04:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "golang"
+      - "microservices"
+    reviewers:
+      - "backend-team"
+    
+    groups:
+      go-core:
+        patterns:
+          - "golang.org/*"
+      
+      grpc-packages:
+        patterns:
+          - "google.golang.org/grpc*"
+          - "google.golang.org/protobuf*"
+    
+    commit-message:
+      prefix: "chore(deps)"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Kubernetes (Helm Charts)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "docker"
+    directory: "/k8s"
+    schedule:
+      interval: "weekly"
+      day: "wednesday"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "kubernetes"
+      - "helm"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Gradle (Android App)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "gradle"
+    directory: "/mobile/android"
+    schedule:
+      interval: "weekly"
+      day: "thursday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "android"
+      - "mobile"
+    reviewers:
+      - "mobile-team"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Composer (PHP - Legacy Services)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "composer"
+    directory: "/legacy"
+    schedule:
+      interval: "monthly"
+      day: "first-monday"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "php"
+      - "legacy"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Bundler (Ruby - Scripts)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "bundler"
+    directory: "/scripts/ruby"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 2
+    labels:
+      - "dependencies"
+      - "ruby"
+      - "scripts"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Cargo (Rust - Performance-Critical Components)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "cargo"
+    directory: "/services/scanner-engine"
+    schedule:
+      interval: "weekly"
+      day: "friday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "rust"
+      - "performance"
+    reviewers:
+      - "performance-team"
+    
+    groups:
+      tokio-ecosystem:
+        patterns:
+          - "tokio*"
+          - "hyper*"
+      
+      crypto-libraries:
+        patterns:
+          - "ring"
+          - "rustls*"
+          - "openssl*"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Maven (Java Services)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "maven"
+    directory: "/services/data-processor"
+    schedule:
+      interval: "weekly"
+      day: "saturday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "java"
+      - "spring"
+    
+    groups:
+      spring-framework:
+        patterns:
+          - "org.springframework*"
+      
+      apache-commons:
+        patterns:
+          - "org.apache.commons*"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 pub (Dart/Flutter - Mobile)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "pub"
+    directory: "/mobile/flutter"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "flutter"
+      - "dart"
+      - "mobile"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 NuGet (.NET Services)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "nuget"
+    directory: "/services/reporting"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "dotnet"
+      - "csharp"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Mix (Elixir Services)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "mix"
+    directory: "/services/realtime-processor"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    labels:
+      - "dependencies"
+      - "elixir"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 Swift Package Manager (iOS)
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "swift"
+    directory: "/mobile/ios"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "ios"
+      - "swift"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 GitHub Actions Workflows
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "github-actions"
+    directory: "/.github/workflows"
+    schedule:
+      interval: "daily"
+      time: "06:00"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "workflows"
+      - "automation"
+
+# ═══════════════════════════════════════════════════════════════
+# 📦 devcontainer
+# ═══════════════════════════════════════════════════════════════
+  - package-ecosystem: "docker"
+    directory: "/.devcontainer"
+    schedule:
+      interval: "monthly"
+    open-pull-requests-limit: 2
+    labels:
+      - "dependencies"
+      - "devcontainer"
+      - "development"
+
+# ═══════════════════════════════════════════════════════════════
+# 📝 ملاحظات مهمة
+# ═══════════════════════════════════════════════════════════════
+#
+# 1. Security Updates:
+#    - يتم فحص التحديثات الأمنية يومياً
+#    - تُنشأ PRs تلقائياً للثغرات الحرجة
+#
+# 2. Grouping Strategy:
+#    - التبعيات المرتبطة تُجمع في PR واحد
+#    - يقلل عدد PRs ويسهل المراجعة
+#
+# 3. Review Process:
+#    - كل PR يُعين تلقائياً لفريق المراجعة
+#    - CI/CD tests تعمل تلقائياً
+#
+# 4. Branch Strategy:
+#    - التحديثات تذهب لـ 'develop' أولاً
+#    - بعد الاختبار تُدمج في 'main'
+#
+# 5. Ignore Strategy:
+#    - النسخ الرئيسية (major) للحزم الحرجة تُتجاهل
+#    - تحتاج مراجعة يدوية ودقيقة
+#
+# 6. Commit Messages:
+#    - تتبع Conventional Commits
+#    - تسهل توليد CHANGELOG
+#
+# 7. Labels:
+#    - تساعد في تصنيف وفلترة PRs
+#    - مفيدة للـ automation
+#
+# 8. Monitoring:
+#    - تحقق من dependabot.yml بانتظام
+#    - راجع security alerts يومياً
+#
+# ═══════════════════════════════════════════════════════════════
